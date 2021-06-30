@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HangmanGameModels;
 
 namespace HangmanGameModels
 {
-    public class Country : ICountry
+    interface ILetter
     {
-        public string Name { get; set; }
-        public string CapitalName { get; set; }
+        public string label { get; set; }
+        public int RepeatCount { get; set; }
+        public bool IsVisible { get; set; }
     }
 }

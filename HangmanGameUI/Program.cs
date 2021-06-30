@@ -10,18 +10,23 @@ namespace HangmanGameUI
         {
             Game game = new();
 
-
-
-            ShowCountryAndCapital(game);
-            Console.ReadLine();
+            ShowMessage(game.ShowInitialMessage());
+            ShowWord(game.GetWord(), game.GetLeftLifePoints());
         }
 
-        private static void ShowCountryAndCapital(Game game)
+        private static void ShowWord(string word, int lifePoints)
         {
-            var table = new ConsoleTable("Country", "Capital");
-            table.AddRow(game.ShowCounty().Name, game.ShowCounty().CapitalName);
-
-            table.Write();
+            ConsoleTable Table = new("Word To Guess", "Life Points");
+            Table.AddRow(word, lifePoints);
+            Table.Options.EnableCount = false;
+            Table.Options.NumberAlignment = Alignment.Right;
+            Table.Write();
         }
+
+        private static void ShowMessage(string message)
+        {
+            Console.WriteLine(message);
+        }
+
     }
 }
