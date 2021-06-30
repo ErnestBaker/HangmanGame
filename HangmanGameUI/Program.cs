@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ConsoleTables;
+using HangmanGameLibrary;
+using System;
 
 namespace HangmanGameUI
 {
@@ -6,7 +8,20 @@ namespace HangmanGameUI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Game game = new();
+
+
+
+            ShowCountryAndCapital(game);
+            Console.ReadLine();
+        }
+
+        private static void ShowCountryAndCapital(Game game)
+        {
+            var table = new ConsoleTable("Country", "Capital");
+            table.AddRow(game.ShowCounty().Name, game.ShowCounty().CapitalName);
+
+            table.Write();
         }
     }
 }

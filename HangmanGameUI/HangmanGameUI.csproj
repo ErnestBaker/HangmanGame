@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HangmanGameData\HangmanGameData.csproj" />
+    <ProjectReference Include="..\HangmanGameLibrary\HangmanGameLibrary.csproj" />
   </ItemGroup>
 
 </Project>

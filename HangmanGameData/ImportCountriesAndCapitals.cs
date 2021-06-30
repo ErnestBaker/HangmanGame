@@ -9,13 +9,14 @@ using HangmanGameModels;
 
 namespace HangmanGameData
 {
-    static class ImportCountriesAndCapitals
+    public static class ImportCountriesAndCapitals
     {
-        private static Country[] GetCountries()
+        public static List<Country> GetCountries()
         {
-            Country[] countries = { };
+            List<Country> countries = new List<Country>();
 
-            var FileStream = new FileStream(path: ConfigurationManager.AppSettings["CountriesAndCapitalsPath"], FileMode.Open, FileAccess.Read);
+            var mainDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+            var FileStream = new FileStream(path: Path.Combine(mainDirectory.Parent.Parent.Parent.Parent.FullName, ConfigurationManager.AppSettings["CountriesAndCapitalsPath"]), FileMode.Open, FileAccess.Read);
             var StreamReader = new StreamReader(FileStream, Encoding.UTF8);
             string line;
 
@@ -24,7 +25,7 @@ namespace HangmanGameData
                 string[] splitLine;
                 splitLine = line.Split("|");
 
-                countries.Append(new Country { Name = splitLine[0], CapitalName = splitLine[1] });
+                countries.Add(new Country { Name = splitLine[0].Trim(), CapitalName = splitLine[1].Trim() });
             }
 
             return countries;
