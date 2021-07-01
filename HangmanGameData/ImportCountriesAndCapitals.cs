@@ -28,6 +28,8 @@ namespace HangmanGameData
                 countries.Add(new Country { Name = splitLine[0].Trim(), CapitalName = splitLine[1].Trim() });
             }
 
+            StreamReader.Close();
+
             return countries;
         }    
 

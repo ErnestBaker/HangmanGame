@@ -2,6 +2,7 @@
 using HangmanGameLibrary;
 using HangmanGameModels;
 using System;
+using System.Collections.Generic;
 
 namespace HangmanGameUI
 {
@@ -11,6 +12,25 @@ namespace HangmanGameUI
 
         static void Main(string[] args)
         {
+            while (true)
+            {
+                StartNewGame();
+
+                if (AskAboutNewGame())
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+
+            }
+        }
+
+        private static void StartNewGame()
+        {
+            Console.Clear();
             CreateNewGame();
 
             ShowMessage(Game.ShowInitialMessage());
@@ -22,6 +42,15 @@ namespace HangmanGameUI
                 Game.NextGuess(roundType, GetAnswer(roundType));
                 ShowWord(Game.GetWord(), Game.GetLeftLifePoints(), Game.GetLettersNotInWord());
             }
+
+            Console.WriteLine(Game.GetResultMessage());
+
+            if (Game.CheckToSaveResult())
+            {
+                Game.SaveScore(AskAboutName());
+            }
+
+            ShowTopScore();
         }
 
         private static void ShowWord(string word, int lifePoints, string lettersNotInWord)
@@ -89,5 +118,39 @@ namespace HangmanGameUI
             return valueToReturn;
         }
 
+        private static bool AskAboutNewGame()
+        {
+            Console.WriteLine($"Do you want to play again? (Y/N)");
+            Console.Write("Type Y if yes: ");
+
+            if (Console.ReadKey().KeyChar.ToString().ToUpper() == "Y")
+            {
+                return true;            
+            }
+
+            return false;
+        }
+
+        private static string AskAboutName()
+        {
+            Console.Write("Please enter your name to record the result: ");
+
+            return Console.ReadLine();
+        }
+
+        private static void ShowTopScore()
+        {
+            List<Score> topScore= Game.GetTopScore();
+
+            Console.WriteLine($"Top Score List:{Environment.NewLine}");
+
+            ConsoleTable Table = new("Player Name", "Date", "Guessing time", "Guessing tries", "Guessed word");
+            foreach (var record in topScore)
+            {
+                Table.AddRow(record.Name, record.Date.ToString("dd.MM.yyyy HH:mm"), record.GuessingTime, record.GuessingTries, record.GuessedWord);
+            }
+
+            Table.Write();
+        }
     }
 }
