@@ -12,6 +12,7 @@ namespace HangmanGameUI
 
         static void Main(string[] args)
         {
+            Console.WriteLine(ASCIDrawer.DrawASCIHangman(1));
             while (true)
             {
                 StartNewGame();
@@ -24,7 +25,6 @@ namespace HangmanGameUI
                 {
                     break;
                 }
-
             }
         }
 
