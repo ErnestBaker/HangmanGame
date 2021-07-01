@@ -15,7 +15,8 @@ namespace HangmanGameLibrary
         private Country Country { get; set; }
         private int Moves { get; set; }
         private int LifePoints { get; set; }
-        public List<Letter> LettersInCapital { get; set; }
+        private List<Letter> LettersInCapital { get; set; }
+        private List<String> LettersNotInWord { get; set; }
 
 
         public Game()
@@ -25,6 +26,7 @@ namespace HangmanGameLibrary
             LettersInCapital = GetLettersInCapital();
 
             Moves = 0;
+            LettersNotInWord = new();
 
             SetAllLettersAsInvisible();
         }
@@ -84,7 +86,7 @@ namespace HangmanGameLibrary
                 Letter LetterData = LettersInCapital.Where(x => x.label.Equals(letter.ToString())).First();
                 if (LetterData.IsVisible)
                 {
-                    outputString += $" {LetterData.label} ";
+                    outputString += $" {LetterData.label.ToUpper()} ";
                 }
                 else
                 {
@@ -96,7 +98,7 @@ namespace HangmanGameLibrary
 
         public string ShowInitialMessage()
         {
-            return $"Hi Player,{System.Environment.NewLine}Welcome to Hangman game. You have only {LifePoints} chances to guess a letter so be careful.{System.Environment.NewLine}GOOD LUCK!{System.Environment.NewLine}";
+            return $"Hi Player,{System.Environment.NewLine}Welcome to Hangman game. You have only {LifePoints} chances to guess a letter so be careful.{System.Environment.NewLine}Try to guess the capital of the country{System.Environment.NewLine}GOOD LUCK!{System.Environment.NewLine}";
         }
 
         public int GetLeftLifePoints()
@@ -104,6 +106,77 @@ namespace HangmanGameLibrary
             return LifePoints;
         }
 
+        public bool PlayNextRound()
+        {
+            if (CheckIfAllLettersAreVisible())
+            {
+                return false;
+            }
+            else if (LifePoints <= 0)
+            {
+                return false;
+            }
+            else
+            {
+                Moves++;
+                return true;
+            }
+        }
 
+        public void NextGuess(RoundType roundType ,string text)
+        {
+            if (roundType == RoundType.OneLetter)
+            {
+                if (LettersInCapital.Any(x => x.label.Equals(text.ToString())))
+                {
+                    int letterIndex = LettersInCapital.FindIndex(x => x.label.Equals(text.ToString().ToLower()));
+                    LettersInCapital[letterIndex].IsVisible = true;
+                }
+                else
+                {
+                    LifePoints -= 1;
+                    LettersNotInWord.Add(text);
+                }
+            }
+            else if (roundType == RoundType.WholeWord)
+            {
+                if (text.ToLower() == this.Country.CapitalName.ToLower())
+                {
+                    foreach (var letter in LettersInCapital)
+                    {
+                        letter.IsVisible = true;
+                    }
+                }
+                else
+                {
+                    LifePoints -= 2;
+                }
+            }
+        }
+
+        private bool CheckIfAllLettersAreVisible()
+        {
+            foreach (var letter in LettersInCapital)
+            {
+                if (!letter.IsVisible)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public string GetLettersNotInWord()
+        {
+            string stringToReturn = String.Empty;
+            stringToReturn = String.Join(",", LettersNotInWord);
+
+            return stringToReturn.ToUpper();
+        }
+
+        public void GetResult()
+        {
+
+        }
     }
 }
